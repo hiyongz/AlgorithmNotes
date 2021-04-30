@@ -1,0 +1,14 @@
+
+class Solution:
+    def fib(self, n):
+        memo = [[0] for _ in range(n)]
+        if n <= 1:
+            return n
+        memo[1] = 1
+        if memo[n] == 0:
+            memo[n] = fib(n - 1) + fib(n - 2)
+        return memo[n]
+if __name__ == "__main__":
+    solu = Solution()
+    result = solu.fib(10)
+    print(result)
