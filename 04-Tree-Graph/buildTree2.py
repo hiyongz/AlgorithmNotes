@@ -19,7 +19,7 @@ class Solution:
 
 
         def mybuildTree(inorder_left: int, inorder_right: int):
-            if inorder_left > inorder_right:
+            if inorder_left > inorder_right or len(postorder)==0:
                 return None
             # 找到根节点
             # 后序遍历中的最后一个节点是根节点
@@ -28,10 +28,11 @@ class Solution:
 
             # 在中序遍历中定位根节点位置
             inorder_root = index[val]
+            root.left = mybuildTree(inorder_left, inorder_root-1)
             # 右子树
             root.right = mybuildTree(inorder_root+1, inorder_right)
             # 左子树
-            root.left = mybuildTree(inorder_left, inorder_root-1)        
+            # root.left = mybuildTree(inorder_left, inorder_root-1)        
             return root
         return mybuildTree(0, n - 1)
 
