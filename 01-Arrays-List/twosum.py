@@ -30,5 +30,5 @@ class Solution(object):
 
 if __name__ == "__main__":
     num = Solution()
-    result = num.twoSum([2, 7, 11, -2,15],9)
+    result = num.twoSum([1, 11, 7, -2,15],9)
     print(result)
