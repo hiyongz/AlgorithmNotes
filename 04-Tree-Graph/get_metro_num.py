@@ -107,6 +107,7 @@ class Solution():
             visited_routes2.add(routes_number)
         count = 0
         while queue1 and queue2:
+
             # 比较俩队列长度 从短的的队列开始搜索
             if len(queue1) > len(queue2):
                 queue1, queue2 = queue2, queue1
