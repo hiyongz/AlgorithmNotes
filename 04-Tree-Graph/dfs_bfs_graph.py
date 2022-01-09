@@ -66,7 +66,7 @@ class Graph:
                 if i not in visited:
                     queue.append(i)
                     visited.append(i)
-        print(visited)  
+        print(visited)
 
 if __name__ == "__main__": 
     # 新建图

@@ -1,6 +1,6 @@
 from collections import deque
 import collections
-from typing import DefaultDict, List
+from typing import List
 
 
 class Solution:
@@ -10,7 +10,7 @@ class Solution:
         if source == target:
             return 0
         # Creating graph or routes
-        graph = DefaultDict(set)
+        graph = collections.defaultdict(set)
         
         # Since index represents bus_number on a route
         # suppose i is bus number and stops are the values present at that index
@@ -47,30 +47,34 @@ class Solution:
                             bfs.append((stop, count + 1))
         return -1
 
-    def numBusesToDestination2(self, routes: List[List[int]], S: int, T: int) -> int:
-        # https://leetcode.com/problems/bus-routes/discuss/256518/A-Different-Python-BFS-Solution-All-in-a-Graph
-        if S == T: return 0
-        
-        # Builds graph.
-        graph = collections.defaultdict(list)  # Don't use set. See below.
-        for bus, stops in enumerate(routes):
-            bus = -bus - 1  # To avoid conflict with the stops.
-            
-            # `set.update` consumes extra memory, so a `list` is used instead.
-            graph[bus] = stops
-            for s in stops:
-                graph[s].append(bus)
+    def numBusesToDestination2(self, routes: List[List[int]], source: int, target: int) -> int:
+        # 如果起点和终点相同则不需要坐地铁
+        if source == target:
+            return 0
+        # 建图
+        graph = collections.defaultdict(set) # 使用字典保存图
 
-        # Does BFS.
-        dq = collections.deque()
-        dq.append((S, 0))
-        seen = set([S])
-        while dq:
-            node, depth = dq.popleft()
-            for adj in graph[node]:
-                if adj in seen: continue
-                if adj == T: return depth
-                # If `adj` < 0, it's a bus, so we add 1 to `depth`.
-                dq.append((adj, depth + 1 if adj < 0 else depth))
-                seen.add(adj)
+        # 以车站作为节点，每个车站对应能经过它的地铁
+        for routes_number, stations in enumerate(routes):
+            for station in stations:
+                graph[station].add(routes_number)
+
+        # 进行广度优先搜索
+        queue = deque([(source, 0)])# 新建一个队列（起点，记录经过的地铁线）
+        visited_stations = set() # 已经经过的车站
+        visited_routes = set() # 已经经过的铁路线
+
+        while queue:
+            station, count = queue.popleft() # 节点出队
+            if station == target:
+                return count
+            # 遍历经过当前车站的铁路线
+            for routes_number in graph[station]:
+                if routes_number not in visited_routes:
+                    visited_routes.add(routes_number)
+                    # 访问当前铁路线的所有车站，如果没有访问，标记为已访问并入队
+                    for station in routes[routes_number]:
+                        if station not in visited_stations:
+                            visited_stations.add(station)
+                            queue.append((station, count + 1))
         return -1
